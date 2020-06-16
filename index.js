@@ -79,15 +79,17 @@ function generateUsers() {
       var kids = 0;
     }
 
-    let billsPerMonth = months.map((month, monthIndex) =>
-      billsTypes.map(({ text, ran }) => ({
-        uuid,
-        type: text,
-        billingYear: 2020,
-        billingMonth: monthIndex + 1,
-        amount: ran(),
-      }))
-    );
+    let billsPerMonth = months
+      .map((month, monthIndex) =>
+        billsTypes.map(({ text, ran }) => ({
+          uuid,
+          type: text,
+          billingYear: 2020,
+          billingMonth: monthIndex + 1,
+          amount: ran(),
+        }))
+      )
+      .flat();
     console.log(billsPerMonth);
     users.push({
       uuid,
