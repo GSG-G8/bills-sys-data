@@ -107,5 +107,3 @@ function generateUsers() {
 
 let result = generateUsers();
 fs.writeFileSync('data.json', JSON.stringify(result, null, '\t'));
-
-// console.log(result);
