@@ -2,6 +2,8 @@ const faker = require('faker');
 const fs = require('fs');
 function generateUsers() {
   let users = [];
+  let bills = [];
+  let billsType = ['water', 'electricity', 'internet', 'mobile'];
   let months = [
     'January',
     'February',
@@ -17,17 +19,21 @@ function generateUsers() {
     'December',
   ];
 
-  for (let counter = 0; counter <= 100; counter++) {
-    let uuid = faker.random.uuid();
+  for (let counter = 1; counter <= 100; counter++) {
+    let id = counter;
     let firstName = faker.name.firstName();
     let lastName = faker.name.lastName();
     let email = faker.internet.email();
-    let mobile = faker.phone.phoneNumberFormat();
-    let status = faker.random.boolean();
+    let mobile_num = faker.phone.phoneNumberFormat();
+    let is_married = faker.random.boolean();
+    let family_count = 0;
+    if (is_married) {
+      family_count = faker.random.number(10);
+    }
 
     let billsTypes = [
       {
-        text: 'water',
+        text: 1,
         ran: (() => {
           const random = faker.random.number({ min: 30, max: 100 });
           return () =>
@@ -38,7 +44,7 @@ function generateUsers() {
         })(),
       },
       {
-        text: 'electricity',
+        text: 2,
         ran: (() => {
           const random = faker.random.number({ min: 50, max: 300 });
           return () =>
@@ -49,7 +55,7 @@ function generateUsers() {
         })(),
       },
       {
-        text: 'internet',
+        text: 3,
         ran: (() => {
           const random = faker.random.number({ min: 50, max: 200 });
           return () =>
@@ -60,7 +66,7 @@ function generateUsers() {
         })(),
       },
       {
-        text: 'mobile',
+        text: 4,
         ran: (() => {
           const random = faker.random.number({ min: 20, max: 100 });
           return () =>
@@ -71,40 +77,32 @@ function generateUsers() {
         })(),
       },
     ];
-    if (status) {
-      var adult = faker.random.number(7);
-      var kids = faker.random.number(7);
-    } else {
-      var adult = 0;
-      var kids = 0;
-    }
 
     let billsPerMonth = months
       .map((month, monthIndex) =>
         billsTypes.map(({ text, ran }) => ({
-          uuid,
+          id,
           type: text,
-          billingYear: 2020,
-          billingMonth: monthIndex + 1,
+          billing_year: 2020,
+          billing_month: monthIndex + 1,
           amount: ran(),
         }))
       )
       .flat();
-    console.log(billsPerMonth);
+
     users.push({
-      uuid,
+      id,
       first_name: firstName,
       last_name: lastName,
       email,
-      mobile,
-      status,
-      adult,
-      kids,
-      billsPerMonth,
+      password: '$2b$10$iKuTb4mbRTnkmJ8mvvCUmOUAoph0w2OM8kSEj3HCFaM3T99GW.Pri',
+      mobile_num,
+      is_married,
+      family_count,
     });
+    bills.push(...billsPerMonth);
   }
-
-  return { data: users };
+  return { users, bills, types: billsType };
 }
 
 let result = generateUsers();
